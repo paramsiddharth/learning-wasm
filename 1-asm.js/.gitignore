@@ -1,0 +1,4 @@
+*.exe
+*.wasm
+*.js
+*.html
