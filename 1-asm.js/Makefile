@@ -8,6 +8,6 @@ build-wasm:
 	em++ sum.cpp -s WASM=1 -o sum.html
 
 clean:
-	rm *.html
-	rm *.js
-	rm *.wasm
+	-rm *.html
+	-rm *.js
+	-rm *.wasm
