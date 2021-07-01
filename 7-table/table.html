@@ -1,0 +1,19 @@
+<script>
+	const table = new WebAssembly.Table({
+		initial: 2,
+		element: 'anyfunc'
+	});
+
+	(async () => {
+		const result = await WebAssembly.instantiateStreaming(fetch('funcs.wasm'));
+		const { instance, module } = result;
+
+		console.log(result);
+
+		table.set(0, instance.exports.add);
+		table.set(1, instance.exports.get9);
+
+		console.log(`1 + 2 = ${table.get(0)(1, 2)}`);
+		console.log(`9 = ${table.get(1)()}`);
+	})();
+</script>
