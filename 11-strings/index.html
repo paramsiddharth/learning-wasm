@@ -1,0 +1,23 @@
+<script async>
+	(async () => {
+		const memory = new WebAssembly.Memory({
+			initial: 1
+		});
+
+		function logString(offset, length) {
+			const bytes = new Uint8Array(memory.buffer, offset, length);
+			const string = new TextDecoder('utf-8').decode(bytes);
+			console.log(string);
+		}
+
+		const importObject = {
+			env: {
+				memory,
+				print: logString
+			}
+		};
+
+		const { instance: { exports: { printHello } } } = await WebAssembly.instantiateStreaming(fetch('string.wasm'), importObject);
+		printHello();
+	})();
+</script>
