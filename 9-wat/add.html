@@ -1,0 +1,11 @@
+<script>
+	(async () => {
+		const { instance: {
+			exports: { addTwo }
+		} } = await WebAssembly.instantiateStreaming(fetch('add.wasm'));
+
+		for (let i = 0; i < 10; i++) {
+			console.log(`${i} + ${i + 1} = ${addTwo(i, i + 1)}`);
+		}
+	})();
+</script>
