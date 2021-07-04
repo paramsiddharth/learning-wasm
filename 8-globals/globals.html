@@ -1,0 +1,30 @@
+<script>
+	const global = new WebAssembly.Global({
+		value: 'i32',
+		mutable: true
+	}, 42);
+
+	(async () => {
+		const { instance } = await WebAssembly.instantiateStreaming(fetch('globals.wasm'), {
+			js: {
+				global
+			}
+		});
+
+		console.log(instance.exports.getGlobal());
+		global.value = 3;
+		console.log(instance.exports.getGlobal());
+
+		console.log();
+		global.value = 0;
+
+		let nums = [];
+
+		for (let i = 0; i < 20; i++) {
+			instance.exports.incGlobal();
+			nums.push(instance.exports.getGlobal());
+		}
+
+		console.log(nums.join(' '));
+	})();
+</script>
