@@ -1,0 +1,7 @@
+<script type='module' async>
+	const { instance, module } = await WebAssembly.instantiateStreaming(fetch('table.wasm'));
+
+	console.log(instance.exports.callFromTableByIndex(0));
+	console.log(instance.exports.callFromTableByIndex(1));
+	console.log(instance.exports.callFromTableByIndex(2));
+</script>
