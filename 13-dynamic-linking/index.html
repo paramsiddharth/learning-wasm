@@ -1,0 +1,16 @@
+<script async type='module'>
+	const importObject = {
+		env: {
+			memory: new WebAssembly.Memory({ initial: 1 }),
+			table: new WebAssembly.Table({
+				initial: 1,
+				element: 'anyfunc'
+			})
+		}
+	};
+
+	await WebAssembly.instantiateStreaming(fetch('mod1.wasm'), importObject);
+	const { instance } = await WebAssembly.instantiateStreaming(fetch('mod2.wasm'), importObject);
+
+	console.log(instance.exports.getMyNumber());
+</script>
