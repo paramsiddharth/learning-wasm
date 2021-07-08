@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>WASM</title>
+</head>
+<body>
+	<script>
+		/**
+		 Types available:
+		 1. Number (int, float)
+		 2. String (char*)
+		 3. Array (Uint8Array, Int8Array) (Only in return types)
+		 */
+
+		var Module = {
+			onRuntimeInitialized: function() {
+				console.log(this.ccall('add', 'number', ['number', 'number'], [3, 4]));
+
+				const fibonacci = this.cwrap('fibonacci', 'number', ['number']);
+
+				[...Array(10)].forEach((v, i) => console.log(`Fibonacci(%o) = %o`, i, fibonacci(i)));
+
+				const arraySum = this.cwrap('arraySum', 'number', ['number', 'number']);
+				const arraySumNew = this.cwrap('arraySum', 'number', ['array', 'number']);
+
+				const arr = [1, 2, 3, 4, 5];
+				const bytesPerElement = this.HEAP32.BYTES_PER_ELEMENT;
+				const arrPointer = this._malloc(arr.length * bytesPerElement);
+				this.HEAP32.set(arr, (arrPointer / bytesPerElement));
+
+				console.log(arraySum(arrPointer, arr.length));
+				
+				this._free(arrPointer);
+			}
+		};
+	</script>
+	<script src='test.js'></script>
+</body>
+</html>
